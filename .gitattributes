@@ -1,0 +1,10 @@
+* text=auto
+*.py text eol=lf
+Dockerfile text eol=lf
+*.sh text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+
+# Preserve the exact bytes referenced by frozen evaluation hashes.
+docs/benchmarks/product-review-sentiment/data/dataset.json -text
+docs/benchmarks/product-review-sentiment/data/question.json -text

@@ -1,0 +1,2 @@
+# 通常PyPIのCUDA付きtorchへ置換されないよう制約を付ける。
+torch==2.11.0+cpu

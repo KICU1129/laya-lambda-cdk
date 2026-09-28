@@ -1,0 +1,8 @@
+{
+  "name": "laya-lambda-cdk",
+  "private": true,
+  "description": "Local tooling for the Python CDK sample",
+  "devDependencies": {
+    "aws-cdk": "2.1143.0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /predict",
+  "rawPath": "/predict",
+  "headers": {
+    "content-type": "application/json"
+  },
+  "requestContext": {
+    "requestId": "local-test",
+    "http": {
+      "method": "POST",
+      "path": "/predict"
+    }
+  },
+  "body": "{\"state\": \"同じ請求が二重に引かれています。返金方法を教えてください。\", \"questions\": {\"department\": {\"type\": \"choice\", \"instructions\": \"この問い合わせを担当する部署を選んでください。\", \"criteria\": {\"billing\": \"請求、支払い、返金\", \"technical\": \"不具合や操作方法\", \"other\": \"それ以外\"}}, \"urgency\": {\"type\": \"score\", \"instructions\": \"問い合わせの緊急度を評価してください。\", \"criteria\": [\"低い\", \"通常\", \"高い\"]}, \"refund_requested\": {\"type\": \"noul\", \"instructions\": \"利用者は返金を求めていますか？\"}}}",
+  "isBase64Encoded": false
+}

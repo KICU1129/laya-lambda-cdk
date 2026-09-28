@@ -1,0 +1,12 @@
+{
+  "app": "python app.py",
+  "context": {
+    "memoryMb": 8192,
+    "reservedConcurrency": 2,
+    "provisionedConcurrency": 0,
+    "torchThreads": 4,
+    "maxLen": 1024,
+    "headMaxLen": 384,
+    "maxQuestions": 8
+  }
+}

@@ -1,0 +1,6 @@
+# torchはDockerfileでCPU専用indexから先にインストールする。
+laya==0.3.21
+transformers==4.57.6
+huggingface-hub==0.34.4
+safetensors==0.6.2
+numpy==2.3.3
