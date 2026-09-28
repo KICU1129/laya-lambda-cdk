@@ -6,10 +6,8 @@ PUBLIC_FILES.txt
 README.md
 SPEED_VALIDATION.md
 THIRD_PARTY_NOTICES.md
-VERIFICATION.md
 app.py
 cdk.json
-docs/REVIEW.md
 docs/benchmarks/product-review-sentiment/.gitignore
 docs/benchmarks/product-review-sentiment/README.md
 docs/benchmarks/product-review-sentiment/RESULTS.md

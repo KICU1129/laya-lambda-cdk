@@ -90,7 +90,7 @@
 6. サーバー推論処理時間はmeta.prediction_msです。ハンドラーの計測範囲であるトークン予算検査とモデル推論を含み、モデルロードとネットワーク時間は含みません。
 7. p95は昇順データの位置(n−1)×0.95で線形補間しました。精度は全100件、レイテンシーの主集計は有効な回答が得られた件が対象です。
 
-### 公開する検証条件
+### 検証条件
 
 | 項目 | 内容 |
 |---|---|
@@ -101,7 +101,7 @@
 | ウォームアップ応答時間 | 358.62ms（100件に含めない） |
 | レビュー文字数 | 51〜71文字、中央値61文字 |
 
-公開版では実行日時、AWSの配置先・資源識別子・実環境の設定値、端末・クライアントの構成情報を除外しています。依存コードの仕様としてモデル名・revisionは残しています。計測値を変更せずに集計を再計算できますが、非公開の環境条件まで含む厳密な性能再現はできません。
+実行環境の詳細は非公開です。保存した結果から集計を再計算できますが、同じレイテンシーの再現を目的とした資料ではありません。
 
 ## 5. この検証で分かる範囲
 
@@ -111,33 +111,24 @@
 
 文章は短く整っており、中立には仕様の説明や中間評価を明示した例が多く含まれます。同じ商品の肯定・否定の組も多いため、100件が100種類の独立した話題を意味するわけではありません。誤字・絵文字・方言・配送と商品への感情の混在も十分に網羅していません。利点と難点が均衡する例を中立に含めるのは今回の分類規約です。
 
-## 6. 公開ファイルと再現方法
+## 6. データと再実行
 
 | ファイル | 内容 |
 |---|---|
 | [RESULTS.md](RESULTS.md) | 全100問の全文、期待値、判定、一致／不一致、各レイテンシー |
 | [data/dataset.json](data/dataset.json) | 事前に固定した問題・期待値・理由 |
 | [data/question.json](data/question.json) | 実際に使用した共通質問 |
-| [data/results.jsonl](data/results.jsonl) | 実行順の判定・確率・時間。公開対象のフィールドだけ保存 |
+| [data/results.jsonl](data/results.jsonl) | 実行順の判定・確率・時間。HTTP応答から判定と計測値を抜粋 |
 | [data/summary.json](data/summary.json) | 正答率、クラス別指標、混同行列、レイテンシー集計 |
-| [data/manifest.json](data/manifest.json) | 公開可能な測定手順、ハッシュ、実行順 |
+| [data/manifest.json](data/manifest.json) | 測定手順、ハッシュ、実行順 |
 | [data/warmup.json](data/warmup.json) | 集計から除外したウォームアップ |
 | [data/label-review.json](data/label-review.json) | 推論前に別のAIが全100件を確認した記録 |
 | [scripts/](scripts/) | API評価とMarkdown生成のコード |
-
-このフォルダーは単独でGitHubに配置できる構成です。AWSアカウントID、API URL、ARN、署名ヘッダー、認証情報、端末の絶対パスは含めていません。結果JSONLは公開用にフィールドを選別しているため、HTTP応答全文ではありません。
 
 ### 保存データだけでMarkdownを再生成
 
 ```bash
 python scripts/render_product_review_report.py --root .
-```
-
-集計コードには、誤判定・失敗・未取得を含む手計算可能な例と、結果IDの重複を拒否するテストを同梱しています。送信先の検証テストも同梱しています。
-
-```bash
-python -m pip install -r requirements-dev.txt
-python -m pytest tests -q
 ```
 
 ### 自分のAWS環境で再評価
@@ -149,12 +140,6 @@ python -m pip install -r requirements.txt
 python scripts/evaluate_product_reviews.py --dataset data/dataset.json --outputs PRIVATE_OUTPUTS_JSON --out-dir new-run --profile YOUR_PROFILE
 ```
 
-new-runは非公開の実行記録です。そのままコミット・配布せず、以下の公開データ作成コマンドで許可した項目だけを別フォルダーへ取り出してください。ネットワークやAWSの状況によりレイテンシーは変わります。強制終了や端末停止で後片付けが実行されなかった場合は、対象aliasのPC設定を確認してください。
-
-```bash
-python scripts/sanitize_review_results.py --input new-run --out-dir public-data
-```
-
-元のdataを保存したうえでpublic-dataをdataとして配置し、Markdownを再生成できます。モデル実行前のラベル確認記録は、別途個人・環境情報を含まないことを確認して追加してください。
+計測結果はnew-runに保存されます。途中停止した場合は、対象aliasのProvisioned Concurrencyが解除されているか確認してください。
 
 Markdownの生成は100件の送信が完了し、有効な応答が1件以上ある実行が対象です。途中停止や全件失敗の場合はsummary.jsonを確認してください。途中停止時も未取得分を含む全100件を正答率の分母に残します。
